@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <title>Item Form</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-6 offset-3">
+                <h1 class="text-center mt-4">Item Form</h1>
+                <form id="myForm" class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label for="id" class="form-label">Item Id</label>
+                        <input type="text" class="form-control" id="id" placeholder="Enter the id" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" placeholder="Enter the name" required>
+                    </div> 
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price</label>
+                        <input type="text" class="form-control" id="price" placeholder="Enter the price" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="qty" class="form-label">Qty</label>
+                        <input type="text" class="form-control" id="qty" placeholder="Enter the qty" required>
+                    </div>
+                    <button class="btn btn-success" id="submit-btn" type="button">Save</button>
+                    <button class="btn btn-primary" id="update-btn" type="button">Update</button>
+                    <button class="btn btn-danger" id="delete-btn" type="button">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
