@@ -11,26 +11,35 @@
         <div class="row">
             <div class="col-6 offset-3">
                 <h1 class="text-center mt-4">Item Form</h1>
-                <form id="myForm" class="needs-validation" novalidate>
+                <form id="myForm" novalidate>
                     <div class="mb-3">
                         <label for="id" class="form-label">Item Id</label>
                         <input type="text" class="form-control" id="id" placeholder="Enter the id" required>
+                        <div class="valid-feedback">Looks good!</div>
+                        <div class="invalid-feedback">Please enter the item id.</div>
                     </div>
                     <div class="mb-3">
                         <label for="name" class="form-label">Name</label>
                         <input type="text" class="form-control" id="name" placeholder="Enter the name" required>
+                        <div class="valid-feedback">Looks good!</div>
+                        <div class="invalid-feedback">Please enter the item name.</div>
                     </div> 
                     <div class="mb-3">
                         <label for="price" class="form-label">Price</label>
                         <input type="text" class="form-control" id="price" placeholder="Enter the price" required>
+                        <div class="valid-feedback">Looks good!</div>
+                        <div class="invalid-feedback">Please enter the item price.</div>
                     </div>
                     <div class="mb-3">
                         <label for="qty" class="form-label">Qty</label>
                         <input type="text" class="form-control" id="qty" placeholder="Enter the qty" required>
+                        <div class="valid-feedback">Looks good!</div>
+                        <div class="invalid-feedback">Please enter the item qty.</div>
                     </div>
                     <button class="btn btn-success" id="submit-btn" type="button">Save</button>
                     <button class="btn btn-primary" id="update-btn" type="button">Update</button>
                     <button class="btn btn-danger" id="delete-btn" type="button">Delete</button>
+                    <button class="btn btn-secondary" id="reset-btn" type="reset">Reset</button>
                 </form>
             </div>
         </div>

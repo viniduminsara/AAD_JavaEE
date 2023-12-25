@@ -12,12 +12,9 @@ import lk.ijse.gdse.mini_project.db.DBProcess;
 import lk.ijse.gdse.mini_project.dto.ItemDTO;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 @WebServlet(name = "item", urlPatterns = "/item",
         initParams = {
@@ -67,15 +64,13 @@ public class Item extends HttpServlet {
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         if (req.getContentType() != null && req.getContentType().toLowerCase().startsWith("application/json")) {
             Jsonb jsonb = JsonbBuilder.create();
-            List<ItemDTO> itemDTOList = jsonb.fromJson(
-                    req.getReader(),
-                    new ArrayList<ItemDTO>() {}.getClass().getGenericSuperclass()
-            );
+            ItemDTO itemDTO = jsonb.fromJson(req.getReader(), ItemDTO.class);
 
-            PrintWriter writer = resp.getWriter();
-            resp.setContentType("text/html");
-
-            writer.println(DBProcess.updateItems(itemDTOList, connection) ? "Item Updated" : "Item not Updated");
+            if(DBProcess.updateItems(itemDTO, connection)){
+                resp.setStatus(HttpServletResponse.SC_OK);
+            }else {
+                resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            }
         }else{
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }
@@ -85,15 +80,13 @@ public class Item extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         if (req.getContentType() != null && req.getContentType().toLowerCase().startsWith("application/json")) {
             Jsonb jsonb = JsonbBuilder.create();
-            List<ItemDTO> itemDTOList = jsonb.fromJson(
-                    req.getReader(),
-                    new ArrayList<ItemDTO>() {}.getClass().getGenericSuperclass()
-            );
+            ItemDTO itemDTO = jsonb.fromJson(req.getReader(), ItemDTO.class);
 
-            PrintWriter writer = resp.getWriter();
-            resp.setContentType("text/html");
-
-            writer.println(DBProcess.deleteItems(itemDTOList, connection) ? "Item Deleted" : "Item not Deleted");
+            if(DBProcess.deleteItems(itemDTO, connection)){
+                resp.setStatus(HttpServletResponse.SC_OK);
+            }else {
+                resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            }
         }else{
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }

@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 public class DBProcess{
 
@@ -103,31 +102,27 @@ public class DBProcess{
         }
     }
 
-    public static boolean updateItems(List<ItemDTO> list, Connection connection)    {
+    public static boolean updateItems(ItemDTO itemDTO, Connection connection)    {
         try {
             PreparedStatement ps = connection.prepareStatement(UPDATE_DATA);
-            for (ItemDTO itemDTO : list) {
-                ps.setString(1, itemDTO.getName());
-                ps.setDouble(2, itemDTO.getPrice());
-                ps.setInt(3, itemDTO.getQty());
-                ps.setInt(4, itemDTO.getId());
+            ps.setString(1, itemDTO.getName());
+            ps.setDouble(2, itemDTO.getPrice());
+            ps.setInt(3, itemDTO.getQty());
+            ps.setInt(4, itemDTO.getId());
 
-                if (ps.executeUpdate() == 0) return false;
-            }
-            return true;
+            return ps.executeUpdate() != 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static boolean deleteItems(List<ItemDTO> list, Connection connection) {
+    public static boolean deleteItems(ItemDTO itemDTO, Connection connection) {
         try {
             PreparedStatement ps = connection.prepareStatement(DELETE_DATA);
-            for (ItemDTO itemDTO : list) {
-                ps.setInt(1, itemDTO.getId());
-                if (ps.executeUpdate() == 0) return false;
-            }
-            return true;
+            ps.setInt(1, itemDTO.getId());
+
+            return ps.executeUpdate() != 0;
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
