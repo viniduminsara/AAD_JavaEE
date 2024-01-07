@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DBProcess{
 
@@ -19,6 +21,7 @@ public class DBProcess{
     private static final String DELETE_QUERY = "DELETE FROM customer WHERE id = ?";
 
     //item
+    private static final String GET_DATA = "SELECT * from item";
     private static final String SAVE_DATA = "INSERT INTO item (id, name, price, qty) VALUES (?,?,?,?)";
     private static final String UPDATE_DATA = "UPDATE item SET name = ?, price = ?, qty = ? WHERE id = ?";
     private static final String DELETE_DATA = "DELETE FROM item WHERE id = ?";
@@ -88,6 +91,27 @@ public class DBProcess{
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static List<ItemDTO> getItems(Connection connection){
+        List<ItemDTO> items = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement(GET_DATA);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()){
+                ItemDTO itemDTO = new ItemDTO(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getDouble(3),
+                        rs.getInt(4)
+                );
+                items.add(itemDTO);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return items;
     }
 
     public static boolean saveItem(ItemDTO itemDTO, Connection connection){

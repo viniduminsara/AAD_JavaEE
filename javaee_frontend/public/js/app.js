@@ -2,6 +2,33 @@ const form = $('#myForm')[0];
 const reset = $('#reset-btn');
 const url = 'http://localhost:8080/mini_project/item';
 
+$(function() {
+    populateItemTable();
+});
+
+function populateItemTable(){
+    $.ajax({
+        type: 'GET',
+        url: url,
+        success: function(data){
+            $('tbody').empty();
+            data.forEach(item => {
+                $('tbody').append(`
+                    <tr>
+                        <th scope="row">${item.id}</th>
+                        <td>${item.name}</td>
+                        <td>${item.price}</td>
+                        <td>${item.qty}</td>
+                    </tr>
+                `)
+            });
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            alert('Failed to fetch items data', textStatus, errorThrown);
+        }
+    })
+}
+
 $('#submit-btn').on('click', (event) => {
     if(form.checkValidity()){
         const itemData = {
@@ -21,6 +48,7 @@ $('#submit-btn').on('click', (event) => {
                 if(http.readyState == 4 && http.status == 201){
                     alert('Item Successfully Created');
                     reset.click();
+                    populateItemTable();
                 }
                 
             }
@@ -60,6 +88,7 @@ $('#update-btn').on('click', (event) => {
                 // Handle success
                 alert('Item Successfully Updated');
                 reset.click();
+                populateItemTable();
             })
             .catch(error => {
                 // Handle error
@@ -92,6 +121,7 @@ $('#delete-btn').on('click', (event) => {
             success: function(res){
                 alert('Item Successfully Deleted');
                 reset.click();
+                populateItemTable();
             },
             error: function(error){
                 alert(`${error.status} : ${error.statusText}`);
