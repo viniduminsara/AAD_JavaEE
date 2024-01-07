@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lk.ijse.gdse.mini_project.db.DBProcess;
 import lk.ijse.gdse.mini_project.dto.CustomerDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -25,9 +27,11 @@ import java.sql.*;
 public class Customer extends HttpServlet {
 
     private Connection connection;
+    final static Logger logger = LoggerFactory.getLogger(Customer.class);
 
     @Override
     public void init() throws ServletException {
+        logger.info("Init customer servlet");
         try {
             String user = getServletConfig().getInitParameter("db-user");
             String password = getServletConfig().getInitParameter("db-pw");

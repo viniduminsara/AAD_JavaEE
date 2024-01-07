@@ -2,6 +2,8 @@ package lk.ijse.gdse.mini_project.db;
 
 import lk.ijse.gdse.mini_project.dto.CustomerDTO;
 import lk.ijse.gdse.mini_project.dto.ItemDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -88,7 +90,7 @@ public class DBProcess{
         }
     }
 
-    public static boolean saveItems(ItemDTO itemDTO, Connection connection){
+    public static boolean saveItem(ItemDTO itemDTO, Connection connection){
         try {
             PreparedStatement ps = connection.prepareStatement(SAVE_DATA);
                 ps.setInt(1, itemDTO.getId());
@@ -102,7 +104,7 @@ public class DBProcess{
         }
     }
 
-    public static boolean updateItems(ItemDTO itemDTO, Connection connection)    {
+    public static boolean updateItem(ItemDTO itemDTO, Connection connection)    {
         try {
             PreparedStatement ps = connection.prepareStatement(UPDATE_DATA);
             ps.setString(1, itemDTO.getName());
@@ -116,7 +118,7 @@ public class DBProcess{
         }
     }
 
-    public static boolean deleteItems(ItemDTO itemDTO, Connection connection) {
+    public static boolean deleteItem(ItemDTO itemDTO, Connection connection) {
         try {
             PreparedStatement ps = connection.prepareStatement(DELETE_DATA);
             ps.setInt(1, itemDTO.getId());

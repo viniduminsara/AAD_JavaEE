@@ -49,19 +49,22 @@ $('#update-btn').on('click', (event) => {
             qty: $('#qty').val()
         };
         
-        $.ajax({
-            type: 'PUT',
-            url: url,
-            contentType: 'application/json',
-            data: JSON.stringify(itemData),
-            success: function(res){
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(itemData),
+        })
+            .then(data => {
+                // Handle success
                 alert('Item Successfully Updated');
                 reset.click();
-            },
-            error: function(error){
-                alert(`${error.status} : ${error.statusText}`);
-            }
-        });
+            })
+            .catch(error => {
+                // Handle error
+                alert(error.message);
+            });        
 
     }else{
         event.preventDefault();

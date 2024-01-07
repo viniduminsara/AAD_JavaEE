@@ -3,42 +3,38 @@ package lk.ijse.gdse.mini_project.api;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebInitParam;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lk.ijse.gdse.mini_project.db.DBProcess;
 import lk.ijse.gdse.mini_project.dto.ItemDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
-@WebServlet(name = "item", urlPatterns = "/item",
-        initParams = {
-                @WebInitParam(name = "db-user", value = "root"),
-                @WebInitParam(name = "db-pw", value = "1234"),
-                @WebInitParam(name = "db-url", value = "jdbc:mysql://localhost:3306/miniProject"),
-                @WebInitParam(name="db-class", value = "com.mysql.cj.jdbc.Driver")
-        }
-        , loadOnStartup = 7)
+@WebServlet(name = "item", urlPatterns = "/item", loadOnStartup = 7)
 public class Item extends HttpServlet {
 
     private Connection connection;
+    final static Logger logger = LoggerFactory.getLogger(Item.class);
 
     @Override
     public void init() throws ServletException {
         try {
-            String user = getServletConfig().getInitParameter("db-user");
-            String password = getServletConfig().getInitParameter("db-pw");
-            String url = getServletConfig().getInitParameter("db-url");
-            String driverClass = getServletConfig().getInitParameter("db-class");
+            logger.info("Init Item servlet");
 
-            Class.forName(driverClass);
-            connection = DriverManager.getConnection(url, user, password);
-        } catch (ClassNotFoundException | SQLException e) {
+            InitialContext ctx = new InitialContext();
+            DataSource pool = (DataSource) ctx.lookup("java:comp/env/jdbc/miniproject");
+            this.connection = pool.getConnection();
+
+        } catch (NamingException | SQLException e) {
             throw new ServletException("Database connection initialization failed", e);
         }
     }
@@ -49,10 +45,12 @@ public class Item extends HttpServlet {
             Jsonb jsonb = JsonbBuilder.create();
             ItemDTO itemDTO = jsonb.fromJson(req.getReader(), ItemDTO.class);
 
-            if(DBProcess.saveItems(itemDTO, connection)){
+            if(DBProcess.saveItem(itemDTO, connection)){
                 resp.setStatus(HttpServletResponse.SC_CREATED);
+                logger.info("Item Saved");
             }else {
                 resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                logger.info("Failed to Save");
             }
 
         }else{
@@ -66,7 +64,7 @@ public class Item extends HttpServlet {
             Jsonb jsonb = JsonbBuilder.create();
             ItemDTO itemDTO = jsonb.fromJson(req.getReader(), ItemDTO.class);
 
-            if(DBProcess.updateItems(itemDTO, connection)){
+            if(DBProcess.updateItem(itemDTO, connection)){
                 resp.setStatus(HttpServletResponse.SC_OK);
             }else {
                 resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -82,7 +80,7 @@ public class Item extends HttpServlet {
             Jsonb jsonb = JsonbBuilder.create();
             ItemDTO itemDTO = jsonb.fromJson(req.getReader(), ItemDTO.class);
 
-            if(DBProcess.deleteItems(itemDTO, connection)){
+            if(DBProcess.deleteItem(itemDTO, connection)){
                 resp.setStatus(HttpServletResponse.SC_OK);
             }else {
                 resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
